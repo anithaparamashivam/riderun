@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Light theme tokens ──────────────────────────────────── */
+:root {
+  --color-primary:     #4F46E5;
+  --color-background:  #FFFFFF;
+  --color-foreground:  #18181B;
+  --color-muted:       #F4F4F5;
+  --color-accent:      #EEF2FF;
+  --color-destructive: #DC2626;
+  --color-border:      #E4E4E7;
+  --color-input:       #E4E4E7;
+  --color-ring:        #4F46E5;
+  --color-success:     #16A34A;
+  --color-warning:     #D97706;
+}
+
+/* ── Dark theme tokens ───────────────────────────────────── */
+.dark {
+  --color-primary:     #818CF8;
+  --color-background:  #09090B;
+  --color-foreground:  #FAFAFA;
+  --color-muted:       #27272A;
+  --color-accent:      #1E1B4B;
+  --color-destructive: #EF4444;
+  --color-border:      #3F3F46;
+  --color-input:       #3F3F46;
+  --color-ring:        #818CF8;
+  --color-success:     #4ADE80;
+  --color-warning:     #FCD34D;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+}

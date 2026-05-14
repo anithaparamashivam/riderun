@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideRun — UX Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --primary:            #4F46E5;
+      --primary-hover:      #4338CA;
+      --primary-foreground: #FFFFFF;
+      --background:         #FFFFFF;
+      --foreground:         #18181B;
+      --muted:              #F4F4F5;
+      --muted-foreground:   #71717A;
+      --accent:             #EEF2FF;
+      --destructive:        #DC2626;
+      --destructive-light:  #FEF2F2;
+      --border:             #E4E4E7;
+      --input:              #E4E4E7;
+      --ring:               #4F46E5;
+      --success:            #16A34A;
+      --success-light:      #F0FDF4;
+      --warning:            #D97706;
+      --warning-light:      #FFFBEB;
+      --radius:             12px;
+      --radius-sm:          8px;
+      --shadow:             0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md:          0 4px 12px rgba(0,0,0,.10);
+      --shadow-lg:          0 10px 30px rgba(0,0,0,.15);
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; background: #F1F5F9; color: var(--foreground); line-height: 1.5; }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+    input, textarea { font-family: inherit; outline: none; }
+
+    /* ─── Lucide icon sizing ─────────────────────────────────── */
+    i[data-lucide] { display: inline-flex; flex-shrink: 0; }
+
+    .nav-icon svg        { width: 15px; height: 15px; stroke-width: 2; }
+    .sidebar-logo-icon svg { width: 22px; height: 22px; stroke-width: 2; color: #fff; }
+    .login-logo svg      { width: 52px; height: 52px; stroke-width: 1.5; color: var(--primary); }
+    .topbar-brand-icon svg { width: 18px; height: 18px; stroke-width: 2.5; color: var(--primary); }
+    .back-btn svg        { width: 16px; height: 16px; stroke-width: 2.5; }
+    .logout-icon svg     { width: 15px; height: 15px; stroke-width: 2; }
+    .role-card-icon svg  { width: 30px; height: 30px; stroke-width: 1.5; }
+    .role-check svg      { width: 18px; height: 18px; stroke-width: 2.5; color: var(--primary); }
+    .sc-icon svg         { width: 22px; height: 22px; stroke-width: 1.5; }
+    .sc-arrow svg        { width: 18px; height: 18px; stroke-width: 2; }
+    .payment-note svg    { width: 16px; height: 16px; stroke-width: 2; flex-shrink: 0; }
+    .error-msg svg       { width: 13px; height: 13px; stroke-width: 2.5; flex-shrink: 0; }
+    .suggestion-icon svg { width: 14px; height: 14px; stroke-width: 2; color: var(--muted-foreground); flex-shrink: 0; }
+    .map-provider-pin svg { width: 18px; height: 18px; stroke-width: 2; color: #fff; }
+    .success-icon svg    { width: 40px; height: 40px; stroke-width: 1.5; color: var(--success); }
+    .unmatched-icon svg  { width: 52px; height: 52px; stroke-width: 1.5; color: var(--muted-foreground); }
+    .location-icon svg   { width: 15px; height: 15px; stroke-width: 2; color: var(--success); }
+    .complete-btn-icon svg { width: 18px; height: 18px; stroke-width: 2; }
+    .badge-icon svg      { width: 11px; height: 11px; stroke-width: 2.5; }
+    .modal-badge-icon svg { width: 13px; height: 13px; stroke-width: 2.5; }
+    .cash-icon svg       { width: 14px; height: 14px; stroke-width: 2; }
+    .waiting-icon svg    { width: 16px; height: 16px; stroke-width: 2; color: var(--muted-foreground); }
+    .preview-btn-icon svg { width: 15px; height: 15px; stroke-width: 2; }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .layout { display: flex; height: 100vh; }
+
+    /* ─── Sidebar ────────────────────────────────────────────── */
+    .sidebar {
+      width: 240px; min-width: 240px; background: #1E1B4B;
+      overflow-y: auto; display: flex; flex-direction: column;
+    }
+    .sidebar-group { padding: 0 8px 8px; }
+    .sidebar-label {
+      padding: 6px 8px 4px; font-size: 10px; font-weight: 600;
+      color: #6366F1; text-transform: uppercase; letter-spacing: .07em;
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      padding: 8px 10px; border-radius: 6px; background: transparent;
+      color: #A5B4FC; font-size: 13px; font-weight: 400;
+      text-align: left; transition: background .15s, color .15s;
+    }
+    .nav-btn:hover { background: rgba(99,102,241,.15); color: #C7D2FE; }
+    .nav-btn.active { background: var(--primary); color: #fff; font-weight: 500; }
+    .nav-btn .nav-icon { display: flex; flex-shrink: 0; }
+
+    /* ─── Main area ──────────────────────────────────────────── */
+    .main { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 32px; }
+
+    /* ─── Phone frame ────────────────────────────────────────── */
+    .phone {
+      width: 375px; min-height: 667px; background: var(--background);
+      border-radius: 36px; box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,.06);
+      overflow: hidden; display: flex; flex-direction: column; position: relative;
+    }
+
+    /* ─── Topbar ─────────────────────────────────────────────── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 12px; border-bottom: 1px solid var(--border);
+      background: var(--background);
+    }
+    .topbar-brand {
+      font-size: 17px; font-weight: 700; color: var(--primary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+      color: #fff; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logout-link {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 13px; color: var(--muted-foreground); cursor: pointer;
+    }
+    .logout-link:hover { color: var(--destructive); }
+
+    .back-btn {
+      display: flex; align-items: center; gap: 5px; font-size: 14px;
+      color: var(--primary); cursor: pointer; background: none;
+      padding: 0; font-weight: 500;
+    }
+
+    .page-content { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .page-title { font-size: 20px; font-weight: 700; }
+    .page-subtitle { font-size: 14px; color: var(--muted-foreground); margin-top: 2px; }
+
+    /* ─── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      width: 100%; padding: 13px 20px; border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 600; transition: all .15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+    .btn-outline:hover { background: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--muted-foreground); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { background: var(--muted); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { background: #15803D; }
+    .btn-disabled { background: var(--muted); color: var(--muted-foreground); cursor: not-allowed; }
+
+    /* ─── Inputs ─────────────────────────────────────────────── */
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 13px; font-weight: 500; }
+    .input-field {
+      width: 100%; padding: 11px 14px 11px 38px; border: 1.5px solid var(--input);
+      border-radius: var(--radius-sm); font-size: 14px; color: var(--foreground);
+      background: var(--background); transition: border-color .15s, box-shadow .15s;
+    }
+    .input-field:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
+    .input-field::placeholder { color: var(--muted-foreground); }
+    .input-field.error { border-color: var(--destructive); }
+    .input-field.no-icon { padding-left: 14px; }
+    .error-msg { font-size: 12px; color: var(--destructive); display: flex; align-items: center; gap: 4px; }
+
+    textarea.input-field { resize: vertical; min-height: 100px; line-height: 1.6; padding-left: 14px; }
+
+    /* Input icon wrapper */
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      display: flex; pointer-events: none;
+    }
+    .input-icon svg { width: 16px; height: 16px; stroke-width: 2; color: var(--muted-foreground); }
+
+    /* ─── Cards ──────────────────────────────────────────────── */
+    .card {
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 16px; background: var(--background); box-shadow: var(--shadow);
+    }
+
+    /* ─── Badge ──────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    }
+    .badge-ride    { background: var(--accent); color: var(--primary); }
+    .badge-errand  { background: var(--warning-light); color: var(--warning); }
+    .badge-online  { background: var(--success-light); color: var(--success); }
+    .badge-offline { background: var(--muted); color: var(--muted-foreground); }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+    /* ─── Payment note ────────────────────────────────────────── */
+    .payment-note {
+      font-size: 13px; color: var(--muted-foreground);
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 14px; background: var(--muted); border-radius: var(--radius-sm);
+    }
+
+    /* ─── Spinner ─────────────────────────────────────────────── */
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%;
+      animation: spin .8s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner-sm { width: 18px; height: 18px; border-width: 2px; }
+
+    /* ─── Login ──────────────────────────────────────────────── */
+    .login-screen {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 32px 24px; gap: 12px;
+      background: linear-gradient(160deg, #EEF2FF 0%, #FFFFFF 60%);
+    }
+    .login-logo {
+      width: 80px; height: 80px; border-radius: 20px;
+      background: var(--accent); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4px;
+    }
+    .login-brand { font-size: 28px; font-weight: 700; color: var(--primary); }
+    .login-tagline { font-size: 14px; color: var(--muted-foreground); text-align: center; margin-bottom: 16px; }
+    .google-btn {
+      width: 100%; padding: 13px 20px; border-radius: var(--radius-sm);
+      background: var(--primary); color: #fff; font-size: 15px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .15s; box-shadow: var(--shadow-md);
+    }
+    .google-btn:hover { background: var(--primary-hover); }
+    .google-icon {
+      width: 22px; height: 22px; background: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: var(--primary); flex-shrink: 0;
+    }
+
+    /* ─── Role Selection ─────────────────────────────────────── */
+    .role-card {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 20px 16px; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .role-card:hover  { border-color: var(--primary); background: var(--accent); }
+    .role-card.selected { border-color: var(--primary); background: var(--accent); box-shadow: 0 0 0 3px rgba(79,70,229,.12); }
+    .role-card-header { display: flex; align-items: center; justify-content: space-between; }
+    .role-card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--muted); display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .role-card.selected .role-card-icon  { background: rgba(79,70,229,.15); }
+    .role-card-icon svg { color: var(--foreground); }
+    .role-card.selected .role-card-icon svg { color: var(--primary); }
+    .role-check { display: none; }
+    .role-card.selected .role-check { display: flex; }
+    .role-card-title { font-size: 16px; font-weight: 600; }
+    .role-card-desc  { font-size: 13px; color: var(--muted-foreground); }
+
+    /* ─── Service cards ──────────────────────────────────────── */
+    .service-card {
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 20px 16px; cursor: pointer; transition: all .15s;
+      display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow);
+    }
+    .service-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .sc-icon {
+      width: 46px; height: 46px; border-radius: 12px; background: var(--muted);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background .15s;
+    }
+    .service-card:hover .sc-icon { background: var(--accent); }
+    .service-card:hover .sc-icon svg { color: var(--primary); }
+    .sc-icon svg { color: var(--foreground); }
+    .sc-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .sc-title { font-size: 16px; font-weight: 600; }
+    .sc-desc  { font-size: 13px; color: var(--muted-foreground); }
+    .sc-arrow { color: var(--muted-foreground); display: flex; }
+
+    /* ─── Autocomplete suggestions ────────────────────────────��� */
+    .suggestions {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--background); box-shadow: var(--shadow-md); overflow: hidden;
+    }
+    .suggestion-item {
+      padding: 10px 14px; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover { background: var(--muted); }
+
+    /* ─── Waiting ─────────────────────────────────────────────── */
+    .waiting-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center; }
+    .waiting-title  { font-size: 18px; font-weight: 600; }
+    .waiting-sub    { font-size: 14px; color: var(--muted-foreground); max-width: 240px; }
+    .request-summary {
+      width: 100%; padding: 14px 16px; background: var(--muted);
+      border-radius: var(--radius-sm); font-size: 14px; font-weight: 500;
+      text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .request-summary svg { width: 15px; height: 15px; stroke-width: 2; color: var(--primary); }
+
+    /* ─── Alert boxes ─────────────────────────────────────────── */
+    .alert-box { border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .alert-box.error   { background: var(--destructive-light); border: 1px solid #FECACA; }
+    .alert-box.warning { background: var(--warning-light); border: 1px solid #FDE68A; }
+    .alert-box .alert-title { font-size: 14px; font-weight: 600; }
+    .alert-box .alert-msg   { font-size: 13px; color: var(--muted-foreground); }
+
+    /* ─── Map ─────────────────────────────────────────────────── */
+    .map-placeholder {
+      height: 340px; background: #E8F0E9;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px; position: relative; overflow: hidden;
+    }
+    .map-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(100,130,100,.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,130,100,.15) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+    .map-road-h { position: absolute; left: 0; right: 0; height: 3px; background: rgba(255,255,255,.75); }
+    .map-road-v { position: absolute; top: 0; bottom: 0; width: 3px; background: rgba(255,255,255,.75); }
+    .map-provider-pin {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--primary);
+      border: 3px solid #fff; box-shadow: var(--shadow-md);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      animation: mapPulse 2s ease-in-out infinite;
+    }
+    @keyframes mapPulse {
+      0%,100% { box-shadow: var(--shadow-md), 0 0 0 0 rgba(79,70,229,.4); }
+      50%      { box-shadow: var(--shadow-md), 0 0 0 10px rgba(79,70,229,0); }
+    }
+    .map-label {
+      font-size: 12px; font-weight: 600; color: var(--primary);
+      background: #fff; padding: 3px 10px; border-radius: 20px;
+      box-shadow: var(--shadow); position: relative; z-index: 1;
+    }
+    .tracking-bar { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+    .tracking-bar-title { font-size: 14px; font-weight: 600; }
+    .tracking-bar-sub   { font-size: 13px; color: var(--muted-foreground); display: flex; align-items: center; gap: 5px; }
+    .tracking-bar-sub svg { width: 13px; height: 13px; stroke-width: 2; }
+
+    /* ─── Success screen ─────────────────────────────────────── */
+    .success-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; gap: 16px; text-align: center; }
+    .success-icon { width: 76px; height: 76px; border-radius: 50%; background: var(--success-light); display: flex; align-items: center; justify-content: center; }
+    .success-title { font-size: 20px; font-weight: 700; }
+    .success-sub   { font-size: 14px; color: var(--muted-foreground); }
+
+    /* ─── Provider availability ──────────────────────────────── */
+    .availability-card { border: 1.5px solid var(--border); border-radius: var(--radius); padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .avail-row   { display: flex; align-items: center; justify-content: space-between; }
+    .avail-status { display: flex; align-items: center; gap: 8px; }
+    .status-dot  { width: 10px; height: 10px; border-radius: 50%; }
+    .status-dot.online  { background: var(--success); }
+    .status-dot.offline { background: var(--muted-foreground); }
+    .status-label { font-size: 16px; font-weight: 600; }
+    .toggle { width: 48px; height: 26px; border-radius: 13px; cursor: pointer; position: relative; transition: background .2s; border: none; flex-shrink: 0; }
+    .toggle.on  { background: var(--success); }
+    .toggle.off { background: #D1D5DB; }
+    .toggle::after { content: ''; position: absolute; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: left .2s; }
+    .toggle.on::after  { left: 25px; }
+    .toggle.off::after { left: 3px; }
+    .avail-desc { font-size: 13px; color: var(--muted-foreground); }
+    .waiting-box { background: var(--muted); border-radius: var(--radius-sm); padding: 14px 16px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted-foreground); }
+    .waiting-box svg { width: 15px; height: 15px; stroke-width: 2; }
+
+    /* ─── Request alert modal ────────────────────────────────── */
+    .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: flex-end; z-index: 10; }
+    .modal-sheet { width: 100%; background: var(--background); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -8px 30px rgba(0,0,0,.15); }
+    .modal-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto; }
+    .modal-title { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .request-detail-row { display: flex; gap: 6px; font-size: 14px; }
+    .detail-label { color: var(--muted-foreground); min-width: 58px; }
+    .detail-value { font-weight: 500; }
+    .countdown-bar  { height: 6px; background: var(--muted); border-radius: 3px; overflow: hidden; }
+    .countdown-fill { height: 100%; background: var(--primary); border-radius: 3px; width: 70%; transition: width 1s linear; }
+    .countdown-label { font-size: 12px; color: var(--muted-foreground); text-align: right; margin-top: 4px; }
+    .modal-actions  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-accept { padding: 12px; border-radius: var(--radius-sm); background: var(--primary); color: #fff; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
+    .btn-accept:hover { background: var(--primary-hover); }
+    .btn-accept svg { width: 16px; height: 16px; stroke-width: 2.5; }
+    .btn-decline { padding: 12px; border-radius: var(--radius-sm); background: transparent; color: var(--muted-foreground); font-size: 15px; font-weight: 500; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .15s; }
+    .btn-decline:hover { background: var(--muted); }
+    .btn-decline svg { width: 16px; height: 16px; stroke-width: 2; }
+
+    /* ─── Location indicator ─────────────────────────────────── */
+    .location-indicator { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--success); font-weight: 500; }
+    .loc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: blink 1.4s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+    .progress-bar  { height: 6px; background: var(--muted); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--success); border-radius: 3px; width: 65%; animation: progressPulse 2s ease-in-out infinite; }
+    @keyframes progressPulse { 0%,100% { opacity: 1; } 50% { opacity: .6; } }
+
+    /* ─── Sidebar logo ───────────────────────────────────────── */
+    .sidebar-logo { padding: 16px; display: flex; align-items: center; gap: 10px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .sidebar-logo-icon { display: flex; }
+    .sidebar-logo-text { font-size: 16px; font-weight: 700; line-height: 1.2; }
+    .sidebar-logo-sub  { font-size: 10px; color: #6366F1; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ─── Screen visibility ───────────────────────────────────── */
+    .screen { display: none; flex-direction: column; height: 100%; }
+    .screen.active { display: flex; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ══════════════════════════════════════════════ -->
+  <nav class="sidebar" aria-label="Screen navigation">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-icon"><i data-lucide="car-front"></i></span>
+      <div>
+        <div class="sidebar-logo-text">RideRun</div>
+        <div class="sidebar-logo-sub">UX Mockups</div>
+      </div>
+    </div>
+
+    <div class="sidebar-group" style="margin-top:12px">
+      <div class="sidebar-label">Shared</div>
+      <button class="nav-btn active" onclick="show('login')" id="nav-login">
+        <span class="nav-icon"><i data-lucide="log-in"></i></span> Login
+      </button>
+      <button class="nav-btn" onclick="show('role')" id="nav-role">
+        <span class="nav-icon"><i data-lucide="user-check"></i></span> Role Selection
+      </button>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-label">Passenger</div>
+      <button class="nav-btn" onclick="show('p-home')" id="nav-p-home">
+        <span class="nav-icon"><i data-lucide="house"></i></span> Home
+      </button>
+      <button class="nav-btn" onclick="show('p-ride')" id="nav-p-ride">
+        <span class="nav-icon"><i data-lucide="car-front"></i></span> Ride Request
+      </button>
+      <button class="nav-btn" onclick="show('p-errand')" id="nav-p-errand">
+        <span class="nav-icon"><i data-lucide="shopping-bag"></i></span> Errand Request
+      </button>
+      <button class="nav-btn" onclick="show('p-waiting')" id="nav-p-waiting">
+        <span class="nav-icon"><i data-lucide="clock"></i></span> Waiting
+      </button>
+      <button class="nav-btn" onclick="show('p-unmatched')" id="nav-p-unmatched">
+        <span class="nav-icon"><i data-lucide="triangle-alert"></i></span> No Provider
+      </button>
+      <button class="nav-btn" onclick="show('p-tracking')" id="nav-p-tracking">
+        <span class="nav-icon"><i data-lucide="map-pin"></i></span> Live Tracking
+      </button>
+      <button class="nav-btn" onclick="show('p-done')" id="nav-p-done">
+        <span class="nav-icon"><i data-lucide="circle-check"></i></span> Service Complete
+      </button>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-label">Provider</div>
+      <button class="nav-btn" onclick="show('pr-home')" id="nav-pr-home">
+        <span class="nav-icon"><i data-lucide="house"></i></span> Home & Availability
+      </button>
+      <button class="nav-btn" onclick="show('pr-alert')" id="nav-pr-alert">
+        <span class="nav-icon"><i data-lucide="bell"></i></span> Request Alert
+      </button>
+      <button class="nav-btn" onclick="show('pr-errand-alert')" id="nav-pr-errand-alert">
+        <span class="nav-icon"><i data-lucide="shopping-bag"></i></span> Errand Alert
+      </button>
+      <button class="nav-btn" onclick="show('pr-active')" id="nav-pr-active">
+        <span class="nav-icon"><i data-lucide="navigation"></i></span> Active Request
+      </button>
+      <button class="nav-btn" onclick="show('pr-done')" id="nav-pr-done">
+        <span class="nav-icon"><i data-lucide="circle-check"></i></span> Service Complete
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ════════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="phone">
+
+      <!-- ── 1. LOGIN ───────────────────────────────────────── -->
+      <div class="screen active" id="screen-login">
+        <div class="login-screen">
+          <div class="login-logo"><i data-lucide="car-front" class="login-logo"></i></div>
+          <div class="login-brand">RideRun</div>
+          <div class="login-tagline">Transport &amp; Errand Service<br>Connecting Chennai to you.</div>
+          <button class="google-btn" onclick="simulateLogin(this)">
+            <div class="google-icon">G</div>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+
+      <!-- ── 2. ROLE SELECTION ──────────────────────────────── -->
+      <div class="screen" id="screen-role">
+        <div class="topbar">
+          <button class="back-btn"><i data-lucide="arrow-left"></i> Back</button>
+        </div>
+        <div class="page-content">
+          <div>
+            <div class="page-title">Welcome, Ani!</div>
+            <div class="page-subtitle">How will you use RideRun?</div>
+          </div>
+
+          <div class="role-card" id="role-passenger" onclick="selectRole('passenger')">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i data-lucide="user"></i></div>
+              <div class="role-check"><i data-lucide="check" class="role-check"></i></div>
+            </div>
+            <div class="role-card-title">I'm a Passenger</div>
+            <div class="role-card-desc">Book rides and errands across Chennai</div>
+          </div>
+
+          <div class="role-card" id="role-provider" onclick="selectRole('provider')">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i data-lucide="car-front"></i></div>
+              <div class="role-check"><i data-lucide="check" class="role-check"></i></div>
+            </div>
+            <div class="role-card-title">I'm a Provider</div>
+            <div class="role-card-desc">Fulfill requests and earn on your schedule</div>
+          </div>
+
+          <button class="btn btn-disabled" id="continue-btn" disabled>Continue</button>
+        </div>
+      </div>
+
+      <!-- ── 3. PASSENGER HOME ──────────────────────────────── -->
+      <div class="screen" id="screen-p-home">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span>
+            RideRun
+          </div>
+          <div class="topbar-right">
+            <div class="avatar">A</div>
+            <span class="logout-link"><span class="logout-icon"><i data-lucide="log-out"></i></span></span>
+          </div>
+        </div>
+        <div class="page-content">
+          <div>
+            <div class="page-title">Good morning, Ani</div>
+            <div class="page-subtitle">What do you need today?</div>
+          </div>
+
+          <div class="service-card" onclick="show('p-ride')">
+            <div class="sc-icon"><i data-lucide="car-front"></i></div>
+            <div class="sc-text">
+              <div class="sc-title">Ride</div>
+              <div class="sc-desc">Get from A to B with a driver</div>
+            </div>
+            <div class="sc-arrow"><i data-lucide="chevron-right"></i></div>
+          </div>
+
+          <div class="service-card" onclick="show('p-errand')">
+            <div class="sc-icon"><i data-lucide="shopping-bag"></i></div>
+            <div class="sc-text">
+              <div class="sc-title">Errand</div>
+              <div class="sc-desc">Pick up items from any shop</div>
+            </div>
+            <div class="sc-arrow"><i data-lucide="chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4. RIDE REQUEST ────────────────────────────────── -->
+      <div class="screen" id="screen-p-ride">
+        <div class="topbar">
+          <button class="back-btn" onclick="show('p-home')"><i data-lucide="arrow-left"></i> Back</button>
+          <div style="font-size:16px;font-weight:600">Book a Ride</div>
+          <div style="width:56px"></div>
+        </div>
+        <div class="page-content">
+          <div class="input-group">
+            <label class="input-label">Pickup Location</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="map-pin"></i></span>
+              <input class="input-field" id="pickup-input" type="text" placeholder="Enter pickup address…" oninput="toggleSuggestions('pickup-suggestions', this.value)" />
+            </div>
+            <div id="pickup-suggestions" class="suggestions" style="display:none">
+              <div class="suggestion-item" onclick="selectSuggestion('pickup-input','pickup-suggestions','Anna Nagar, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> Anna Nagar, Chennai
+              </div>
+              <div class="suggestion-item" onclick="selectSuggestion('pickup-input','pickup-suggestions','T. Nagar, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> T. Nagar, Chennai
+              </div>
+              <div class="suggestion-item" onclick="selectSuggestion('pickup-input','pickup-suggestions','Velachery, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> Velachery, Chennai
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Destination</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="flag"></i></span>
+              <input class="input-field" id="dest-input" type="text" placeholder="Enter destination…" oninput="toggleSuggestions('dest-suggestions', this.value)" />
+            </div>
+            <div id="dest-suggestions" class="suggestions" style="display:none">
+              <div class="suggestion-item" onclick="selectSuggestion('dest-input','dest-suggestions','Adyar, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> Adyar, Chennai
+              </div>
+              <div class="suggestion-item" onclick="selectSuggestion('dest-input','dest-suggestions','Tambaram, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> Tambaram, Chennai
+              </div>
+              <div class="suggestion-item" onclick="selectSuggestion('dest-input','dest-suggestions','OMR, Chennai')">
+                <span class="suggestion-icon"><i data-lucide="map-pin"></i></span> OMR, Chennai
+              </div>
+            </div>
+            <div id="dest-error" class="error-msg" style="display:none">
+              <i data-lucide="triangle-alert"></i> Service is only available in Chennai.
+            </div>
+          </div>
+
+          <div class="payment-note">
+            <span class="payment-note"><i data-lucide="banknote"></i></span>
+            Payment: Cash on delivery
+          </div>
+
+          <button class="btn btn-primary" onclick="submitRide(this)">Request Ride</button>
+        </div>
+      </div>
+
+      <!-- ── 5. ERRAND REQUEST ───────────────────────────────── -->
+      <div class="screen" id="screen-p-errand">
+        <div class="topbar">
+          <button class="back-btn" onclick="show('p-home')"><i data-lucide="arrow-left"></i> Back</button>
+          <div style="font-size:16px;font-weight:600">Book an Errand</div>
+          <div style="width:56px"></div>
+        </div>
+        <div class="page-content">
+          <div class="input-group">
+            <label class="input-label">Shop Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="store"></i></span>
+              <input class="input-field" id="shop-input" type="text" placeholder="e.g. Reliance Fresh, Spencer's…" />
+            </div>
+            <div id="shop-error" class="error-msg" style="display:none">
+              <i data-lucide="triangle-alert"></i> Shop name is required.
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Items to collect</label>
+            <textarea class="input-field no-icon" id="items-input" placeholder="e.g.&#10;2x milk&#10;1x bread&#10;1x eggs (dozen)"></textarea>
+            <div id="items-error" class="error-msg" style="display:none">
+              <i data-lucide="triangle-alert"></i> Please list the items to collect.
+            </div>
+            <div style="font-size:12px;color:var(--muted-foreground)">Tip: one item per line</div>
+          </div>
+
+          <div class="payment-note">
+            <span class="payment-note"><i data-lucide="banknote"></i></span>
+            Payment: Cash on delivery
+          </div>
+
+          <button class="btn btn-primary" onclick="submitErrand(this)">Request Errand</button>
+        </div>
+      </div>
+
+      <!-- ── 6. WAITING FOR PROVIDER ────────────────────────── -->
+      <div class="screen" id="screen-p-waiting">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+        </div>
+        <div class="waiting-center">
+          <div class="spinner"></div>
+          <div class="waiting-title">Looking for a provider…</div>
+          <div class="waiting-sub">Your request has been submitted. A provider will be assigned shortly.</div>
+          <div class="request-summary">
+            <i data-lucide="car-front"></i> Ride: T. Nagar → Adyar
+          </div>
+          <button class="btn btn-ghost" style="width:auto;padding:10px 20px">Cancel Request</button>
+        </div>
+      </div>
+
+      <!-- ── 6b. UNMATCHED ──────────────────────────────────── -->
+      <div class="screen" id="screen-p-unmatched">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+        </div>
+        <div class="waiting-center">
+          <div class="unmatched-icon"><i data-lucide="user-x"></i></div>
+          <div class="alert-box error" style="width:100%">
+            <div class="alert-title" style="color:var(--destructive)">No providers available right now.</div>
+            <div class="alert-msg">Please try again in a few minutes. Your request has been cancelled.</div>
+          </div>
+          <button class="btn btn-primary" onclick="show('p-home')">Try Again</button>
+        </div>
+      </div>
+
+      <!-- ── 7. LIVE TRACKING ───────────────────────────────── -->
+      <div class="screen" id="screen-p-tracking">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="badge badge-online"><div class="badge-dot"></div> En route</div>
+        </div>
+        <div class="map-placeholder">
+          <div class="map-grid"></div>
+          <div class="map-road-h" style="top:38%"></div>
+          <div class="map-road-h" style="top:64%"></div>
+          <div class="map-road-v" style="left:28%"></div>
+          <div class="map-road-v" style="left:62%"></div>
+          <div class="map-provider-pin"><i data-lucide="car-front"></i></div>
+          <div class="map-label">Provider</div>
+        </div>
+        <div class="tracking-bar">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="tracking-bar-title">Your Ride</div>
+            <div class="badge badge-ride">
+              <span class="badge-icon"><i data-lucide="car-front"></i></span> Ride
+            </div>
+          </div>
+          <div class="tracking-bar-sub">T. Nagar → Adyar</div>
+          <div style="margin-top:6px;font-size:13px;color:var(--muted-foreground);display:flex;align-items:center;gap:5px">
+            <i data-lucide="navigation" style="width:13px;height:13px;stroke-width:2"></i>
+            Provider is on the way &nbsp;·&nbsp; Cash on delivery
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 8. PASSENGER SERVICE COMPLETE ─────────────────── -->
+      <div class="screen" id="screen-p-done">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+        </div>
+        <div class="success-screen">
+          <div class="success-icon"><i data-lucide="circle-check" class="success-icon"></i></div>
+          <div class="success-title">Your service is complete!</div>
+          <div class="success-sub">Thank you for using RideRun.</div>
+          <div class="card" style="width:100%;text-align:left">
+            <div style="font-size:13px;display:flex;flex-direction:column;gap:8px">
+              <div><span style="color:var(--muted-foreground)">Type:</span> <strong>Ride</strong></div>
+              <div><span style="color:var(--muted-foreground)">Route:</span> <strong>T. Nagar → Adyar</strong></div>
+              <div><span style="color:var(--muted-foreground)">Payment:</span> <strong>Cash on delivery</strong></div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="show('p-home')">Back to Home</button>
+        </div>
+      </div>
+
+      <!-- ── 9. PROVIDER HOME ───────────────────────────────── -->
+      <div class="screen" id="screen-pr-home">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="topbar-right">
+            <div class="avatar">R</div>
+            <span class="logout-link"><span class="logout-icon"><i data-lucide="log-out"></i></span></span>
+          </div>
+        </div>
+        <div class="page-content">
+          <div>
+            <div class="page-title">Hi, Ravi</div>
+            <div class="page-subtitle">Manage your availability below</div>
+          </div>
+
+          <div class="availability-card">
+            <div class="avail-row">
+              <div class="avail-status">
+                <div class="status-dot online" id="pr-status-dot"></div>
+                <div class="status-label" id="pr-status-label">ONLINE</div>
+              </div>
+              <button class="toggle on" id="pr-toggle" onclick="toggleAvailability()" aria-label="Toggle availability" aria-pressed="true"></button>
+            </div>
+            <div class="avail-desc" id="pr-avail-desc">You are receiving new requests.</div>
+          </div>
+
+          <div class="waiting-box" id="pr-waiting-box">
+            <div class="spinner spinner-sm"></div>
+            <span>Waiting for a job…</span>
+          </div>
+
+          <button class="btn btn-outline" onclick="show('pr-alert')" style="margin-top:4px;display:flex;align-items:center;gap:7px">
+            <span class="preview-btn-icon"><i data-lucide="bell"></i></span> Preview Incoming Request
+          </button>
+        </div>
+      </div>
+
+      <!-- ── 10. PROVIDER REQUEST ALERT (RIDE) ─────────────── -->
+      <div class="screen" id="screen-pr-alert">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="topbar-right"><div class="avatar">R</div></div>
+        </div>
+        <div class="waiting-box" style="margin:16px 20px">
+          <div class="spinner spinner-sm"></div>
+          <span>Waiting for a job…</span>
+        </div>
+
+        <div class="modal-overlay" id="ride-modal">
+          <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-title">
+              <span class="badge badge-ride">
+                <span class="modal-badge-icon"><i data-lucide="car-front"></i></span> Ride
+              </span>
+              New Request
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="request-detail-row">
+                <span class="detail-label">From</span>
+                <span class="detail-value">T. Nagar, Chennai</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label">To</span>
+                <span class="detail-value">Adyar, Chennai</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label">Payment</span>
+                <span class="detail-value">Cash on delivery</span>
+              </div>
+            </div>
+            <div>
+              <div class="countdown-bar"><div class="countdown-fill" id="ride-countdown"></div></div>
+              <div class="countdown-label" id="ride-timer">Expires in 28s</div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn-accept" onclick="acceptRequest()">
+                <i data-lucide="check"></i> Accept
+              </button>
+              <button class="btn-decline" onclick="declineRequest()">
+                <i data-lucide="x"></i> Decline
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 11. PROVIDER REQUEST ALERT (ERRAND) ───────────── -->
+      <div class="screen" id="screen-pr-errand-alert">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="topbar-right"><div class="avatar">R</div></div>
+        </div>
+        <div class="waiting-box" style="margin:16px 20px">
+          <div class="spinner spinner-sm"></div>
+          <span>Waiting for a job…</span>
+        </div>
+
+        <div class="modal-overlay">
+          <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-title">
+              <span class="badge badge-errand">
+                <span class="modal-badge-icon"><i data-lucide="shopping-bag"></i></span> Errand
+              </span>
+              New Request
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="request-detail-row">
+                <span class="detail-label">Shop</span>
+                <span class="detail-value">Reliance Fresh, T. Nagar</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label">Items</span>
+                <span class="detail-value">2x milk, 1x bread, 1x eggs</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label">Payment</span>
+                <span class="detail-value">Cash on delivery</span>
+              </div>
+            </div>
+            <div>
+              <div class="countdown-bar"><div class="countdown-fill" style="width:55%"></div></div>
+              <div class="countdown-label">Expires in 18s</div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn-accept" onclick="show('pr-active')">
+                <i data-lucide="check"></i> Accept
+              </button>
+              <button class="btn-decline" onclick="show('pr-home')">
+                <i data-lucide="x"></i> Decline
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 12. PROVIDER ACTIVE REQUEST ───────────────────── -->
+      <div class="screen" id="screen-pr-active">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="badge badge-online"><div class="badge-dot"></div> Active</div>
+        </div>
+        <div class="page-content">
+          <div class="page-title">Active Request</div>
+
+          <div class="card">
+            <div style="margin-bottom:12px">
+              <div class="badge badge-ride">
+                <span class="badge-icon"><i data-lucide="car-front"></i></span> Ride
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:14px">
+              <div class="request-detail-row">
+                <span class="detail-label" style="min-width:72px">From</span>
+                <span class="detail-value">T. Nagar, Chennai</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label" style="min-width:72px">To</span>
+                <span class="detail-value">Adyar, Chennai</span>
+              </div>
+              <div class="request-detail-row">
+                <span class="detail-label" style="min-width:72px">Payment</span>
+                <span class="detail-value">Cash on delivery</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="location-indicator">
+              <div class="loc-dot"></div>
+              <span class="location-icon"><i data-lucide="navigation"></i></span>
+              Sharing your location with passenger
+            </div>
+            <div class="progress-bar" style="margin-top:8px">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-success" onclick="completeService()" style="display:flex;align-items:center;gap:8px">
+            <span class="complete-btn-icon"><i data-lucide="circle-check"></i></span>
+            Mark Complete
+          </button>
+        </div>
+      </div>
+
+      <!-- ── 13. PROVIDER SERVICE COMPLETE ─────────────────── -->
+      <div class="screen" id="screen-pr-done">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <span class="topbar-brand-icon"><i data-lucide="car-front"></i></span> RideRun
+          </div>
+          <div class="topbar-right"><div class="avatar">R</div></div>
+        </div>
+        <div class="success-screen">
+          <div class="success-icon"><i data-lucide="circle-check" class="success-icon"></i></div>
+          <div class="success-title">Service Complete!</div>
+          <div class="success-sub">Great work, Ravi.</div>
+          <div class="card" style="width:100%;text-align:left">
+            <div style="font-size:13px;display:flex;flex-direction:column;gap:8px">
+              <div><span style="color:var(--muted-foreground)">Type:</span> <strong>Ride</strong></div>
+              <div><span style="color:var(--muted-foreground)">Route:</span> <strong>T. Nagar → Adyar</strong></div>
+              <div class="alert-box warning" style="margin-top:4px;padding:10px 12px">
+                <div class="alert-title" style="color:var(--warning);font-size:13px;display:flex;align-items:center;gap:6px">
+                  <span class="cash-icon"><i data-lucide="banknote"></i></span>
+                  Collect cash from passenger
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="show('pr-home')">Back to Home</button>
+        </div>
+      </div>
+
+    </div><!-- /phone -->
+  </main>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  let selectedRole = null;
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    const navBtn = document.getElementById('nav-' + id);
+    if (navBtn) navBtn.classList.add('active');
+    if (id === 'pr-alert') startRideCountdown();
+    else clearInterval(rideCountdownInterval);
+  }
+
+  function simulateLogin(btn) {
+    btn.innerHTML = '<div class="spinner spinner-sm" style="border-top-color:#fff;margin:0"></div> Signing in…';
+    btn.disabled = true;
+    setTimeout(() => { show('role'); btn.disabled = false; }, 1200);
+  }
+
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('role-passenger').classList.toggle('selected', role === 'passenger');
+    document.getElementById('role-provider').classList.toggle('selected', role === 'provider');
+    const btn = document.getElementById('continue-btn');
+    btn.className = 'btn btn-primary';
+    btn.disabled = false;
+    btn.onclick = () => show(role === 'passenger' ? 'p-home' : 'pr-home');
+    btn.textContent = 'Continue';
+  }
+
+  function toggleSuggestions(listId, val) {
+    document.getElementById(listId).style.display = val.length > 1 ? 'block' : 'none';
+  }
+
+  function selectSuggestion(inputId, listId, val) {
+    document.getElementById(inputId).value = val;
+    document.getElementById(listId).style.display = 'none';
+  }
+
+  function submitRide(btn) {
+    const pickup = document.getElementById('pickup-input').value;
+    const dest = document.getElementById('dest-input').value;
+    const errEl = document.getElementById('dest-error');
+    if (!pickup || !dest) {
+      errEl.style.display = 'flex'; return;
+    }
+    errEl.style.display = 'none';
+    btn.innerHTML = '<div class="spinner spinner-sm" style="border-top-color:#fff;margin:0"></div> Finding a provider…';
+    btn.disabled = true; btn.className = 'btn btn-disabled';
+    setTimeout(() => {
+      btn.textContent = 'Request Ride'; btn.disabled = false; btn.className = 'btn btn-primary';
+      show('p-waiting');
+    }, 1500);
+  }
+
+  function submitErrand(btn) {
+    const shop = document.getElementById('shop-input').value;
+    const items = document.getElementById('items-input').value;
+    document.getElementById('shop-error').style.display = !shop ? 'flex' : 'none';
+    document.getElementById('items-error').style.display = !items ? 'flex' : 'none';
+    if (!shop || !items) return;
+    btn.innerHTML = '<div class="spinner spinner-sm" style="border-top-color:#fff;margin:0"></div> Submitting…';
+    btn.disabled = true; btn.className = 'btn btn-disabled';
+    setTimeout(() => {
+      btn.textContent = 'Request Errand'; btn.disabled = false; btn.className = 'btn btn-primary';
+      show('p-waiting');
+    }, 1400);
+  }
+
+  let providerOnline = true;
+  function toggleAvailability() {
+    providerOnline = !providerOnline;
+    document.getElementById('pr-toggle').className    = 'toggle ' + (providerOnline ? 'on' : 'off');
+    document.getElementById('pr-toggle').setAttribute('aria-pressed', providerOnline);
+    document.getElementById('pr-status-dot').className = 'status-dot ' + (providerOnline ? 'online' : 'offline');
+    document.getElementById('pr-status-label').textContent = providerOnline ? 'ONLINE' : 'OFFLINE';
+    document.getElementById('pr-avail-desc').textContent   = providerOnline
+      ? 'You are receiving new requests.'
+      : "You won't receive new requests while offline.";
+    document.getElementById('pr-waiting-box').style.display = providerOnline ? 'flex' : 'none';
+  }
+
+  let rideCountdownInterval;
+  function startRideCountdown() {
+    let t = 28;
+    clearInterval(rideCountdownInterval);
+    document.getElementById('ride-countdown').style.width = '93%';
+    rideCountdownInterval = setInterval(() => {
+      t--;
+      document.getElementById('ride-timer').textContent = 'Expires in ' + t + 's';
+      document.getElementById('ride-countdown').style.width = (t / 30 * 100) + '%';
+      if (t <= 0) { clearInterval(rideCountdownInterval); declineRequest(); }
+    }, 1000);
+  }
+
+  function acceptRequest()  { clearInterval(rideCountdownInterval); show('pr-active'); }
+  function declineRequest() { clearInterval(rideCountdownInterval); show('pr-home'); }
+  function completeService() { show('pr-done'); }
+</script>
+</body>
+</html>
