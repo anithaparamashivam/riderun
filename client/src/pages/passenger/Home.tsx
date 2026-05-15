@@ -10,7 +10,7 @@ export default function PassengerHome() {
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Navbar */}
       <header className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
-        <span className="text-xl font-bold text-[var(--color-primary)]">RideRun</span>
+        <span className="text-xl font-black tracking-wide text-[var(--color-primary)]">FRENZZ</span>
         <div className="flex items-center gap-4">
           <span className="text-sm text-zinc-500">{user?.userId}</span>
           <button

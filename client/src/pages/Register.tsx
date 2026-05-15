@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import FrenzzLogo from '../components/FrenzzLogo';
 
 export default function Register() {
   const { register } = useAuth();
@@ -31,9 +32,10 @@ export default function Register() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-[var(--color-background)] px-4">
       <div className="w-full max-w-sm rounded-2xl border border-[var(--color-border)] bg-white dark:bg-zinc-900 p-8 shadow-sm">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-[var(--color-primary)]">RideRun</h1>
-          <p className="mt-1 text-sm text-zinc-500">Create your account</p>
+        <div className="mb-6 flex flex-col items-center text-center">
+          <FrenzzLogo size={72} />
+          <h1 className="mt-3 text-3xl font-black tracking-wide text-[var(--color-primary)]">FRENZZ</h1>
+          <p className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-[var(--color-primary)]">Care at Doorstep</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>

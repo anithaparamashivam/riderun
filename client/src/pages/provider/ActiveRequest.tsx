@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import { useProviderLocation } from '../../hooks/useProviderLocation';
+import { SERVER_URL } from '../../lib/api';
 
 interface Props {
   requestId: string;
@@ -14,7 +15,9 @@ export default function ActiveRequest({ requestId, onComplete }: Props) {
   const [completing, setCompleting] = useState(false);
 
   useEffect(() => {
-    const s = io({ withCredentials: true, transports: ['websocket'] });
+    const s = SERVER_URL
+      ? io(SERVER_URL, { withCredentials: true, transports: ['websocket'] })
+      : io({ withCredentials: true, transports: ['websocket'] });
     socketRef.current = s;
     return () => { s.disconnect(); };
   }, []);

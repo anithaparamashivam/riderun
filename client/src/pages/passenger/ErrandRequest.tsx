@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../lib/api';
 
 export default function ErrandRequest() {
   const navigate = useNavigate();
@@ -24,10 +24,9 @@ export default function ErrandRequest() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post<{ _id: string }>(
+      const res = await api.post<{ _id: string }>(
         '/api/requests',
-        { type: 'errand', shopName: shopName.trim(), itemList: itemList.trim() },
-        { withCredentials: true }
+        { type: 'errand', shopName: shopName.trim(), itemList: itemList.trim() }
       );
       navigate(`/passenger/waiting/${res.data._id}`);
     } catch {

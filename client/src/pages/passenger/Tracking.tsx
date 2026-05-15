@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { SERVER_URL } from '../../lib/api';
 import TrackingMap from '../../components/TrackingMap';
 
 const MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? '';
@@ -11,7 +12,9 @@ export default function Tracking() {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
-    const socket = io({ withCredentials: true, transports: ['websocket'] });
+    const socket = SERVER_URL
+      ? io(SERVER_URL, { withCredentials: true, transports: ['websocket'] })
+      : io({ withCredentials: true, transports: ['websocket'] });
 
     socket.on('location:update', ({ lat, lng }: { lat: number; lng: number }) => {
       setPosition({ lat, lng });

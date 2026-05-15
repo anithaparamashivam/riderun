@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../lib/api';
 import LocationAutocomplete from '../../components/LocationAutocomplete';
 
 interface LocationValue {
@@ -42,14 +42,13 @@ export default function RideRequest() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post<{ _id: string }>(
+      const res = await api.post<{ _id: string }>(
         '/api/requests',
         {
           type: 'ride',
           pickupLocation: { lat: pickup.lat, lng: pickup.lng, address: pickup.address },
           destination:    { lat: dest.lat,   lng: dest.lng,   address: dest.address },
-        },
-        { withCredentials: true }
+        }
       );
       navigate(`/passenger/waiting/${res.data._id}`);
     } catch {

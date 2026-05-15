@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import axios from 'axios';
+import api, { SERVER_URL } from '../lib/api';
 
 interface AuthUser {
   userId: string;
@@ -29,42 +29,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get<AuthUser>('/api/auth/me', { withCredentials: true })
+    api
+      .get<AuthUser>('/api/auth/me')
       .then(res => setUser(res.data))
       .catch(() => setUser(null))
       .then(() => setLoading(false), () => setLoading(false));
   }, []);
 
   function logout() {
-    window.location.href = '/api/auth/logout';
+    window.location.href = `${SERVER_URL}/api/auth/logout`;
   }
 
   async function updateRole(role: 'passenger' | 'provider') {
-    const res = await axios.patch<AuthUser>(
-      '/api/users/me/role',
-      { role },
-      { withCredentials: true }
-    );
+    const res = await api.patch<AuthUser>('/api/users/me/role', { role });
     setUser(res.data);
   }
 
   async function login(email: string, password: string): Promise<AuthUser> {
-    const res = await axios.post<AuthUser>(
-      '/api/auth/login',
-      { email, password },
-      { withCredentials: true }
-    );
+    const res = await api.post<AuthUser>('/api/auth/login', { email, password });
     setUser(res.data);
     return res.data;
   }
 
   async function register(name: string, email: string, password: string): Promise<AuthUser> {
-    const res = await axios.post<AuthUser>(
-      '/api/auth/register',
-      { name, email, password },
-      { withCredentials: true }
-    );
+    const res = await api.post<AuthUser>('/api/auth/register', { name, email, password });
     setUser(res.data);
     return res.data;
   }

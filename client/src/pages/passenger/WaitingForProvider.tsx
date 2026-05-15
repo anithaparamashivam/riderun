@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { SERVER_URL } from '../../lib/api';
 
 type State = 'waiting' | 'assigned' | 'unmatched';
 
@@ -10,7 +11,9 @@ export default function WaitingForProvider() {
   const [state, setState] = useState<State>('waiting');
 
   useEffect(() => {
-    const socket = io({ withCredentials: true, transports: ['websocket'] });
+    const socket = SERVER_URL
+      ? io(SERVER_URL, { withCredentials: true, transports: ['websocket'] })
+      : io({ withCredentials: true, transports: ['websocket'] });
 
     socket.on('request:assigned', ({ requestId: id }: { requestId: string }) => {
       if (id === requestId) {

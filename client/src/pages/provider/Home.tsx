@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../lib/api';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface ProviderProfile {
@@ -14,8 +14,8 @@ export default function ProviderHome() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios
-      .get<ProviderProfile>('/api/providers/me', { withCredentials: true })
+    api
+      .get<ProviderProfile>('/api/providers/me')
       .then(res => setProfile(res.data))
       .catch(() => setError('Could not load profile.'));
   }, []);
@@ -26,11 +26,7 @@ export default function ProviderHome() {
     setToggling(true);
     setError(null);
     try {
-      await axios.patch(
-        '/api/providers/me/availability',
-        { isOnline: next },
-        { withCredentials: true }
-      );
+      await api.patch('/api/providers/me/availability', { isOnline: next });
       setProfile(prev => prev ? { ...prev, isOnline: next } : prev);
     } catch {
       setError('Failed to update availability. Please try again.');
@@ -45,7 +41,7 @@ export default function ProviderHome() {
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Navbar */}
       <header className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
-        <span className="text-xl font-bold text-[var(--color-primary)]">RideRun</span>
+        <span className="text-xl font-black tracking-wide text-[var(--color-primary)]">FRENZZ</span>
         <div className="flex items-center gap-4">
           {profile && <span className="text-sm text-zinc-500">{profile.name}</span>}
           <button

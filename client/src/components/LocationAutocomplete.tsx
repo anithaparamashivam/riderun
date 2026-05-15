@@ -30,7 +30,7 @@ export default function LocationAutocomplete({ id, label, placeholder, value, on
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ', Chennai, India')}&format=json&limit=5&countrycodes=in&accept-language=en`,
-          { headers: { 'User-Agent': 'RideRun-App/1.0' } }
+          { headers: { 'User-Agent': 'Frenzz-App/1.0' } }
         );
         const data: Suggestion[] = await res.json();
         setSuggestions(data);
